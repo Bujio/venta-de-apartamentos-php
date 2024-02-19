@@ -6,6 +6,14 @@ $db = conectarDB();
 //Errores
 $errores = [];
 
+//iniciamos las variables vacias
+$titulo = "";
+$precio = "";
+$descripcion = "";
+$habitaciones = "";
+$wc = $_POST["wc"];
+$estacionamiento = "";
+$vendedores_Id = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $titulo = $_POST["titulo"];
@@ -41,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   //Revisar si el array de errores está vacio
   if (empty($errores)) {
     //Incluir en la DB
-    $query = " INSERT INTO propiedades(titulo,precio,descripcion,habitaciones,wc,estacionamiento,vendedores_Id) 
+    $query = " INSERT INTO propiedades(titulo,precio,descripcion,habitaciones,wc,estacionamiento,vendedores_Id)
   VALUES ('$titulo','$precio','$descripcion','$habitaciones','$wc','$estacionamiento','$vendedores_Id');";
     //echo $query;
 
@@ -61,7 +69,7 @@ incluirTemplate("header");
   <h1>Crear</h1>
 
   <a href="/admin" class="boton-verde">Volver</a>
-  <?php foreach ($errores as $error ) : ?>
+  <?php foreach ($errores as $error) : ?>
     <div class="alerta error">
       <?php echo $error; ?>
     </div>
@@ -71,35 +79,35 @@ incluirTemplate("header");
       <legend>Información General</legend>
 
       <label for="titulo">Título:</label>
-      <input type="text" name="titulo" placeholder="titulo propiedad" id="titulo">
+      <input type="text" name="titulo" placeholder="titulo propiedad" id="titulo" value="<?php echo $titulo; ?>">
 
       <label for="precio">Precio:</label>
-      <input type="number" name="precio" placeholder="precio propiedad" id="precio">
+      <input type="number" name="precio" placeholder="precio propiedad" id="precio" value="<?php echo $precio; ?>">
 
       <label for="imagen">Imagen:</label>
       <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png">
 
       <label for="descripcion">Descripción:</label>
-      <textarea name="descripcion" id="descripcion"></textarea>
+      <textarea name="descripcion" id="descripcion"><?php echo $descripcion; ?></textarea>
     </fieldset>
 
     <fieldset>
       <legend>Información Propiedad</legend>
 
-      <label for="habitaciones">Habitaciones:</label>
-      <input type="number" name="habitaciones" id="habitaciones" min="1" max="8" placeholder="--Seleccione cantidad--">
+      <label for=" habitaciones">Habitaciones:</label>
+      <input type="number" name="habitaciones" id="habitaciones" min="1" max="8" placeholder="--Seleccione cantidad--" value="<?php echo $habitaciones; ?>">
 
       <label for="baños">Baños:</label>
-      <input type="number" name="wc" id="baños" min="1" max="8" placeholder="--Seleccione cantidad--">
+      <input type="number" name="wc" id="baños" min="1" max="8" placeholder="--Seleccione cantidad--" value="<?php echo $wc; ?>">
 
       <label for="parking">Parking:</label>
-      <input type="number" name="estacionamiento" id="parking" min="1" max="8" placeholder="--Seleccione cantidad--">
+      <input type="number" name="estacionamiento" id="parking" min="1" max="8" placeholder="--Seleccione cantidad--" value="<?php echo $estacionamiento; ?>">
     </fieldset>
 
     <fieldset>
       <legend>Vendedor</legend>
 
-      <select name="vendedor">
+      <select name="vendedor" value="<?php echo $vendedores_Id; ?>">
         <option value="" disabled selected>--Seleccione Vendedor--</option>
         <option value="1">Juan</option>
         <option value="2">Karen</option>
