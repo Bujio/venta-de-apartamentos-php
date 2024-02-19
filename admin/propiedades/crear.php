@@ -3,7 +3,8 @@
 require "../../includes/config/database.php";
 $db = conectarDB();
 
-
+//Errores
+$errores = [];
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -15,15 +16,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $estacionamiento = $_POST["estacionamiento"];
   $vendedores_Id = $_POST["vendedor"];
 
-  //Incluir en la DB
-  $query = " INSERT INTO propiedades(titulo,precio,descripcion,habitaciones,wc,estacionamiento,vendedores_Id) 
+  if (!$titulo) {
+    $errores[] = "Debes incluir un título";
+  }
+  if (!$precio) {
+    $errores[] = "Debes incluir un precio";
+  }
+  if (strlen($descripcion) < 50) {
+    $errores[] = "Debes incluir una descripción y ésta debe ser mayor a 50 caracteres";
+  }
+  if (!$habitaciones) {
+    $errores[] = "Debes indicar el número de habitaciones";
+  }
+  if (!$wc) {
+    $errores[] = "Debes indicar el número de baños";
+  }
+  if (!$estacionamiento) {
+    $errores[] = "Debes indicar el número de estacionamientos";
+  }
+  if (!$vendedores_Id) {
+    $errores[] = "Debes seleccionar un vendedor";
+  }
+
+  //Revisar si el array de errores está vacio
+  if (empty($errores)) {
+    //Incluir en la DB
+    $query = " INSERT INTO propiedades(titulo,precio,descripcion,habitaciones,wc,estacionamiento,vendedores_Id) 
   VALUES ('$titulo','$precio','$descripcion','$habitaciones','$wc','$estacionamiento','$vendedores_Id');";
-  //echo $query;
+    //echo $query;
 
-  $resultado = mysqli_query($db, $query);
-
-  if ($resultado) {
-    echo "Insertado correctamente";
+    $resultado = mysqli_query($db, $query);
+    if ($resultado) {
+      echo "Insertado correctamente";
+    }
   }
 }
 require "../../includes/functions.php";
@@ -36,10 +61,14 @@ incluirTemplate("header");
   <h1>Crear</h1>
 
   <a href="/admin" class="boton-verde">Volver</a>
-
+  <?php foreach ($errores as $error ) : ?>
+    <div class="alerta error">
+      <?php echo $error; ?>
+    </div>
+  <?php endforeach; ?>
   <form class="formulario" method="POST">
     <fieldset>
-      <legend>Infromación General</legend>
+      <legend>Información General</legend>
 
       <label for="titulo">Título:</label>
       <input type="text" name="titulo" placeholder="titulo propiedad" id="titulo">
