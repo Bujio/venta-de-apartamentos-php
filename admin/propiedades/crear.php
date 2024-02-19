@@ -1,4 +1,10 @@
 <?php
+//Base de datos
+require "../../includes/config/database.php";
+$db = conectarDB();
+echo "<pre>";
+var_dump($db);
+echo "</pre>";
 
 require "../../includes/functions.php";
 
