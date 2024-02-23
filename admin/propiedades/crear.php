@@ -3,6 +3,12 @@
 require "../../includes/config/database.php";
 $db = conectarDB();
 
+//consultar vendedores
+$consulta = "SELECT * FROM vendedores;";
+$resultado = mysqli_query($db, $consulta);
+
+
+
 //Errores
 $errores = [];
 
@@ -23,6 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $wc = $_POST["wc"];
   $estacionamiento = $_POST["estacionamiento"];
   $vendedores_Id = $_POST["vendedor"];
+  $creado = date("Y/m/d");
 
   if (!$titulo) {
     $errores[] = "Debes incluir un título";
@@ -49,13 +56,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   //Revisar si el array de errores está vacio
   if (empty($errores)) {
     //Incluir en la DB
-    $query = " INSERT INTO propiedades(titulo,precio,descripcion,habitaciones,wc,estacionamiento,vendedores_Id)
-  VALUES ('$titulo','$precio','$descripcion','$habitaciones','$wc','$estacionamiento','$vendedores_Id');";
+    $query = " INSERT INTO propiedades(titulo,precio,descripcion,habitaciones,wc,estacionamiento,creado,vendedores_Id)
+  VALUES ('$titulo','$precio','$descripcion','$habitaciones','$wc','$estacionamiento','$creado','$vendedores_Id');";
     //echo $query;
 
     $resultado = mysqli_query($db, $query);
     if ($resultado) {
-      echo "Insertado correctamente";
+      //Redireccionar al usuario
+      header("Location: /admin");
     }
   }
 }
@@ -109,8 +117,9 @@ incluirTemplate("header");
 
       <select name="vendedor" value="<?php echo $vendedores_Id; ?>">
         <option value="" disabled selected>--Seleccione Vendedor--</option>
-        <option value="1">Juan</option>
-        <option value="2">Karen</option>
+        <?php while ($vendedor = mysqli_fetch_assoc($resultado)) { ?>
+          <option <?php echo $vendedores_Id === $vendedor["id"] ? "selected" : "" ;?> value="<?php echo $vendedor["id"] ?>"><?php echo $vendedor["nombre"] ?></option>
+        <?php } ?>
       </select>
     </fieldset>
 
