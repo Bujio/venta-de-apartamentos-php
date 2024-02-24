@@ -130,7 +130,7 @@ incluirTemplate("header");
     <input type="number" name="precio" placeholder="precio propiedad" id="precio" value="<?php echo $precio; ?>">
 
     <label for="imagen">Imagen:</label>
-    <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png" name="imagen">
+    <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png, image/webp" name="imagen">
 
     <label for=" descripcion">Descripción:</label>
     <textarea name="descripcion" id="descripcion"><?php echo $descripcion; ?></textarea>

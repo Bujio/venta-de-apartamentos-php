@@ -18,9 +18,9 @@ incluirTemplate("header");
     <h2>Casas y Apartamentos en Venta</h2>
 
     <div class="contenedor-anuncios">
+        <?php while ($anuncio = mysqli_fetch_assoc($query)) : ?>
 
-        <div class="anuncio">
-            <?php while ($anuncio = mysqli_fetch_assoc($query)) : ?>
+            <div class="anuncio">
                 <picture>
                     <!-- <source srcset="build/img/anuncio1.webp" type="image/webp"> -->
                     <source srcset="build/img/<?php echo $anuncio["imagen"] ?>" type="image/jpeg">
@@ -51,10 +51,10 @@ incluirTemplate("header");
                         Ver Propiedad
                     </a>
                 </div><!--.contenido-anuncio-->
-            <?php endwhile ?>
-        </div><!--anuncio-->
+            </div><!--anuncio-->
 
 
+        <?php endwhile ?>
     </div> <!--.contenedor-anuncios-->
 </main>
 
