@@ -28,6 +28,7 @@
     display: flex;
     list-style: none;
     padding: 0;
+    height: auto;
     max-width: 40rem;
 
     li {
@@ -42,4 +43,7 @@
             font-weight: $black;
         }
     }
+}
+.iconos-small{
+    height: 45px;
 }

@@ -45,11 +45,11 @@ incluirTemplate("header");
 
           <td><?php echo $propiedad["id"] ?></td>
           <td><?php echo $propiedad["titulo"] ?></td>
-          <td><img src="/imagenes/<?php echo $propiedad["imagen"] ?>" class="imagen-tabla"></td>
-          <td><?php echo $propiedad["precio"] . "€" ?></td>
+          <td><img src="/src/img/<?php echo $propiedad["imagen"] ?>" class="imagen-tabla"></td>
+          <td><?php echo $propiedad["precio"] . " €" ?></td>
           <td>
             <a class=" boton-rojo-block" href="">Eliminar</a>
-            <a class="boton-amarillo-block" href="">Actualizar</a>
+            <a class="boton-amarillo-block" href="/admin/propiedades/actualizar.php?id=<?php echo $propiedad["id"] ?>">Actualizar</a>
           </td>
         </tr>
       <?php endwhile; ?>

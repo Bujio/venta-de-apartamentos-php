@@ -1,4 +1,5 @@
 <?php
+
 //Base de datos
 require "../../includes/config/database.php";
 $db = conectarDB();
@@ -74,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     /**SUBIDA DE ARCHIVOS **/
 
     //Crear carpeta
-    $carpetaImagenes = "../../imagenes/";
+    $carpetaImagenes = "../../src/img/";
     if (!is_dir($carpetaImagenes)) {
       mkdir($carpetaImagenes);
     }
@@ -159,7 +160,7 @@ incluirTemplate("header");
       </select>
     </fieldset>
 
-    <input type="submit" value="crear propiedad" class="boton-verde">
+    <input type="submit" value="crear propiedad" class="uppercase boton-verde">
   </form>
 </main>
 
