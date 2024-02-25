@@ -22,7 +22,7 @@ incluirTemplate("header");
 
             <div class="anuncio">
                 <picture>
-                    <!-- <source srcset="build/img/anuncio1.webp" type="image/webp"> -->
+                    <source srcset="build/img/<?php echo $anuncio["imagen"] ?>" type="image/webp">
                     <source srcset="build/img/<?php echo $anuncio["imagen"] ?>" type="image/jpeg">
                     <img loading="lazy" src="build/img/<?php echo $anuncio["imagen"] ?>" alt="anuncio">
                 </picture>

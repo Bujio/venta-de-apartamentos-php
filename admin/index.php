@@ -1,12 +1,13 @@
 <?php
-require '../includes/functions.php';
+require "../includes/functions.php";
+require "../includes/config/database.php";
+
 $auth = estaAutenticado();
 
 if (!$auth) {
   header('Location: /');
 }
 //Importamos conexion de DB
-require "../includes/config/database.php";
 $db = conectarDB();
 //Escribimos la query
 $queryPropiedades = "SELECT * FROM propiedades;";
@@ -43,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 //Incluye un template
-require "../includes/functions.php";
 incluirTemplate("header");
 
 ?>
@@ -75,7 +75,7 @@ incluirTemplate("header");
 
           <td class="centrar-texto"><?php echo $propiedad["id"] ?></td>
           <td class="centrar-texto"><?php echo $propiedad["titulo"] ?></td>
-          <td><img src="/src/img/<?php echo $propiedad["imagen"] ?>" class="imagen-tabla "></td>
+          <td><img src="/src/img/<?php echo $propiedad["imagen"]  ?>" class="imagen-tabla "></td>
           <td class="centrar-texto"><?php echo $propiedad["precio"] . " €" ?></td>
           <td>
             <form method="POST" class="w-100">

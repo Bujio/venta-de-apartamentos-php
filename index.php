@@ -42,7 +42,7 @@ incluirTemplate("header", $inicio = true);
         <?php while ($anuncio = mysqli_fetch_assoc($query)) : ?>
             <div class="anuncio">
                 <picture>
-                    <!-- <source srcset="build/img/<?php echo $anuncio["imagen"] ?>.webp" type="image/webp"> -->
+                    <source srcset="build/img/<?php echo $anuncio["imagen"] ?>" type="image/webp">
                     <source srcset="build/img/<?php echo $anuncio["imagen"] ?>" type="image/jpeg">
                     <img loading="lazy" src="build/img/<?php echo $anuncio["imagen"] ?>" alt="anuncio">
                 </picture>

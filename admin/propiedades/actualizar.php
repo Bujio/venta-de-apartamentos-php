@@ -1,5 +1,5 @@
 <?php
-include "../../includes/functions.php";
+require '../../includes/functions.php';
 $auth = estaAutenticado();
 
 if (!$auth) {
@@ -7,6 +7,7 @@ if (!$auth) {
 }
 
 //Identificar valores y validación
+$id = $_GET['id'];
 $id = filter_var($_GET["id"], FILTER_VALIDATE_INT);
 
 //Base de datos
@@ -20,7 +21,7 @@ if (!$id) {
 }
 
 // //Obtener datos de la propiedad
-$datosPropiedad = "SELECT * FROM propiedades WHERE id= $id";
+$datosPropiedad = "SELECT * FROM propiedades WHERE id= '$id'";
 $queryDatosPropiedad = mysqli_query($db, $datosPropiedad);
 $propiedad = mysqli_fetch_assoc($queryDatosPropiedad);
 // echo "<pre>";
@@ -106,7 +107,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       //Eliminar la imagen previa
       unlink($carpetaImagenes . $propiedad['imagen']);
       //Generar nombre único de imagen
-      $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+      $nombreImagen = md5(uniqid(rand(), true)). ".jpg";
 
       //Subir imagen
       move_uploaded_file($imagen["tmp_name"], $carpetaImagenes  . $nombreImagen);
@@ -142,7 +143,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
   }
 }
-require "../../includes/functions.php";
 
 incluirTemplate("header");
 

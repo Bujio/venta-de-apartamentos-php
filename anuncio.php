@@ -26,7 +26,7 @@ incluirTemplate("header");
     <h1><?php echo $propiedad["titulo"] ?></h1>
 
     <picture>
-        <!-- <source srcset="build/img/destacada.webp" type="image/webp"> -->
+        <source srcset="build/img/<?php echo $propiedad["imagen"] ?>" type="image/webp">
         <source srcset="build/img/<?php echo $propiedad["imagen"] ?>" type="image/jpeg">
         <img loading="lazy" src="<?php echo $propiedad["imagen"] ?>" alt="imagen de la propiedad">
     </picture>
