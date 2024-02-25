@@ -1,4 +1,5 @@
 <?php
+require "includes/functions.php";
 require "/bienesRaicesPHP_inicio/includes/config/database.php";
 $db = conectarDB();
 //Petición información
@@ -7,7 +8,6 @@ $infoAnuncio = "SELECT * FROM propiedades LIMIT 3";
 $query = mysqli_query($db, $infoAnuncio);
 
 
-require "includes/functions.php";
 
 incluirTemplate("header", $inicio = true);
 

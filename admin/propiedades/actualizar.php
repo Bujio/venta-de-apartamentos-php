@@ -33,13 +33,14 @@ $resultado = mysqli_query($db, $consulta);
 $errores = [];
 
 //iniciamos las variables vacias
-$titulo = "";
-$precio = "";
-$descripcion = "";
-$habitaciones = "";
-$wc = mysqli_real_escape_string($db, $_POST["wc"]);
-$estacionamiento = "";
-$vendedores_Id = "";
+$titulo = $propiedad["titulo"];
+$precio = $propiedad["precio"];
+$descripcion = $propiedad["descripcion"];
+$habitaciones = $propiedad["habitaciones"];
+$wc = $propiedad["wc"];
+$estacionamiento = $propiedad["estacionamiento"];
+$vendedores_Id = $propiedad["vendedores_id"];
+$imagenPropiedad = $propiedad["imagen"];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $titulo = mysqli_real_escape_string($db, $_POST["titulo"]);
@@ -77,13 +78,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $errores[] = "Debes seleccionar un vendedor";
   }
 
-  if (!$imagen["name"]) {
-    $errores[] = "La imagen es obligatoria";
-  }
-
   //Validar tamaño de la imagen (100 mb máximo)
   $medida = 1000 * 1000;
-
   if ($imagen["size"] > $medida) {
     $errores[] = "La imagen es muy pesada";
   }
@@ -92,19 +88,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if (empty($errores)) {
 
     /**SUBIDA DE ARCHIVOS **/
-
     //Crear carpeta
-    $carpetaImagenes = "../../imagenes/";
+    $carpetaImagenes = "../../src/img/";
     if (!is_dir($carpetaImagenes)) {
       mkdir($carpetaImagenes);
     }
+    $nombreImagen = '';
+
+    if ($imagen["name"]) {
+      //Eliminar la imagen previa
+      unlink($carpetaImagenes . $propiedad['imagen']);
+      //Generar nombre único de imagen
+      $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
+
+      //Subir imagen
+      move_uploaded_file($imagen["tmp_name"], $carpetaImagenes  . $nombreImagen);
+    } else {
+      $nombreImagen = $propiedad['imagen'];
+    }
 
 
-    //Generar nombre único de imagen
-    $nombreImagen = md5(uniqid(rand(), true)) . ".jpg";
-
-    //Subir imagen
-    move_uploaded_file($imagen["tmp_name"], $carpetaImagenes  . $nombreImagen);
 
     // echo "<pre>";
     // var_dump($imagen);
@@ -112,15 +115,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // exit;
 
 
-    //Incluir en la DB
-    $query = " INSERT INTO propiedades(titulo,precio,imagen,descripcion,habitaciones,wc,estacionamiento,creado,vendedores_Id)
-  VALUES ('$titulo','$precio','$nombreImagen','$descripcion','$habitaciones','$wc','$estacionamiento','$creado','$vendedores_Id');";
-    //echo $query;
+    //Actualizar en la DB
+    $query = " UPDATE  propiedades SET
+        titulo='$titulo',
+        precio=$precio,
+        descripcion='$descripcion',
+        wc=$wc,
+        habitaciones=$habitaciones,
+        estacionamiento=$estacionamiento,
+        imagen = '$nombreImagen'
+        WHERE
+        id=$id";
+    echo $query;
 
     $resultado = mysqli_query($db, $query);
     if ($resultado) {
       //Redireccionar al usuario
-      header("Location: /admin?resultado=1");
+      header("Location: /admin?resultado=2");
     }
   }
 }
@@ -139,20 +150,21 @@ incluirTemplate("header");
       <?php echo $error; ?>
     </div>
   <?php endforeach; ?>
-  <form class="formulario" method="POST" enctype="multipart/form-data" <fieldset>
-    <legend>Información General</legend>
+  <form class="formulario" method="POST" enctype="multipart/form-data">
+    <fieldset>
+      <legend>Información General</legend>
 
-    <label for="titulo">Título:</label>
-    <input type="text" name="titulo" placeholder="titulo propiedad" id="titulo" value="<?php echo $titulo; ?>">
+      <label for="titulo">Título:</label>
+      <input type="text" name="titulo" placeholder="titulo propiedad" id="titulo" value="<?php echo $titulo; ?>">
 
-    <label for="precio">Precio:</label>
-    <input type="number" name="precio" placeholder="precio propiedad" id="precio" value="<?php echo $precio; ?>">
+      <label for="precio">Precio:</label>
+      <input type="number" name="precio" placeholder="precio propiedad" id="precio" value="<?php echo $precio; ?>">
 
-    <label for="imagen">Imagen:</label>
-    <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png" name="imagen">
-
-    <label for=" descripcion">Descripción:</label>
-    <textarea name="descripcion" id="descripcion"><?php echo $descripcion; ?></textarea>
+      <label for="imagen">Imagen:</label>
+      <input type="file" name="imagen" id="imagen" accept="image/jpeg, image/png" name="imagen">
+      <img class="imagen-update" src="../../build/img/<?php echo $imagenPropiedad ?>" alt="">
+      <label for=" descripcion">Descripción:</label>
+      <textarea name="descripcion" id="descripcion"><?php echo $descripcion; ?></textarea>
     </fieldset>
 
     <fieldset>
@@ -172,7 +184,6 @@ incluirTemplate("header");
       <legend>Vendedor</legend>
 
       <select name="vendedor" value="<?php echo $vendedores_Id; ?>">
-        <option value="" disabled selected>--Seleccione Vendedor--</option>
         <?php while ($vendedor = mysqli_fetch_assoc($resultado)) { ?>
           <option <?php echo $vendedores_Id === $vendedor["id"] ? "selected" : ""; ?> value="<?php echo $vendedor["id"] ?>"><?php echo $vendedor["nombre"] ?></option>
         <?php } ?>
