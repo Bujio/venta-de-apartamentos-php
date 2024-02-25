@@ -1,4 +1,10 @@
 <?php
+require '../includes/functions.php';
+$auth = estaAutenticado();
+
+if (!$auth) {
+  header('Location: /');
+}
 //Importamos conexion de DB
 require "../includes/config/database.php";
 $db = conectarDB();

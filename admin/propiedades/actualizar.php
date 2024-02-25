@@ -1,4 +1,11 @@
 <?php
+include "../../includes/functions.php";
+$auth = estaAutenticado();
+
+if (!$auth) {
+  header('Location: /');
+}
+
 //Identificar valores y validación
 $id = filter_var($_GET["id"], FILTER_VALIDATE_INT);
 

@@ -26,6 +26,12 @@
     -webkit-box-orient: vertical;
 }
 
+.line-clamp-title {
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
 .imagen-update{
     width: 20rem;
     height: auto;

@@ -48,7 +48,7 @@ incluirTemplate("header", $inicio = true);
                 </picture>
 
                 <div class="contenido-anuncio">
-                    <h3 class="uppercase"><?php echo $anuncio["titulo"] ?></h3>
+                    <h3 class="uppercase module line-clamp-title"><?php echo $anuncio["titulo"] ?></h3>
                     <p class="module line-clamp"><?php echo $anuncio["descripcion"] ?></p>
                     <p class="precio"><?php echo $anuncio["precio"] . " €" ?></p>
 

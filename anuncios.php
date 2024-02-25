@@ -28,7 +28,7 @@ incluirTemplate("header");
                 </picture>
 
                 <div class="contenido-anuncio" key="<?php echo $anuncio["id"] ?>">
-                    <h3><?php echo $anuncio["titulo"] ?></h3>
+                    <h3 class="module line-clamp-title"><?php echo $anuncio["titulo"] ?></h3>
                     <p class="module line-clamp"><?php echo $anuncio["descripcion"] ?></p>
                     <p class="precio"><?php echo $anuncio["precio"] . " €" ?></p>
 

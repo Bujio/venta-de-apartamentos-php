@@ -1,6 +1,11 @@
 <?php
 
 require "../../includes/functions.php";
+$auth = estaAutenticado();
+
+if (!$auth) {
+  header('Location: /');
+}
 
 incluirTemplate("header");
 
