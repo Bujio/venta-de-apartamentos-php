@@ -10,3 +10,31 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.module {
+    margin: 0 0 1em 0;
+    overflow: hidden;
+}
+
+.module p {
+    margin: 0;
+}
+
+.line-clamp {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.imagen-update{
+    width: 20rem;
+    height: auto;
+}
+
+.w-100{
+    width: 100%;
+}
+
+.centrar-texto{
+    text-align: center;
+}

@@ -9,7 +9,7 @@ function darkMode() {
 
     const prefiereDarkMode = window.matchMedia('(prefers-color-scheme: dark)');
 
-    // console.log(prefiereDarkMode.matches);
+    console.log(prefiereDarkMode.matches);
 
     if(prefiereDarkMode.matches) {
         document.body.classList.add('dark-mode');

@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+   
 
     @include tablet {
         align-items: flex-end;
@@ -36,11 +37,12 @@
 }
 
 .navegacion {
-
+    padding-bottom: 3rem;
     visibility: hidden;
     opacity: 0;
     height: 0;
-    transition: visibility .3s ease-in-out, opacity .5s linear, height .5s linear; 
+    transition: visibility .3s ease-in-out, opacity .5s linear, height .5s linear;
+    
 
     @include tablet {
         display: flex;
@@ -48,17 +50,17 @@
         opacity: 1;
         visibility: visible;
     }
-    
+
     a {
         color: $blanco;
         text-decoration: none;
-        font-size: 2.2rem;
+        font-size: 1.4rem;
         display: block;
         text-align: center;
 
         @include tablet {
             margin-right: 2rem;
-            font-size: 1.8rem;
+            font-size: 2.8rem;
 
             &:last-of-type {
                 margin-right: 0;
