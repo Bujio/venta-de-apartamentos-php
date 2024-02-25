@@ -4,8 +4,8 @@ node_modules
 
 
 #ignore files
-usuarios.php
-.env
+# usuarios.php
+
 
 
 #ignore all files in any directory named build
