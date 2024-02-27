@@ -1,4 +1,4 @@
-# BienesRaices
+# BienesRaices POO
 
 Bienesraices is an application developed with PHP, GULP, SASS, JavaScript, and Modernizr, designed to simplify the search, publication, and management of advertisements for buying apartments or flats. Additionally, it features an integrated blog space to share relevant information about the real estate market. The application also includes an admin section that allows authorized users to create, update, and delete properties available on the platform.
 
