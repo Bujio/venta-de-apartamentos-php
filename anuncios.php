@@ -1,8 +1,8 @@
 <?php
 
-require "includes/functions.php";
+require "includes/app.php";
 //Requerir DB
-require "/bienesRaicesPHP_inicio/includes/config/database.php";
+
 $db = conectarDB();
 //Petición información
 $infoAnuncio = "SELECT * FROM propiedades";
