@@ -8,7 +8,7 @@ class Propiedad
 {
   //BASES DE DATOS
   protected static $db;
-  protected static $columnasDB = ['id', 'precio', 'imagen', 'descripcion', 'habitaciones', 'wc', 'estacionamiento', 'creado', 'vendedores_Id'];
+  protected static $columnasDB = ['id','titulo', 'precio', 'imagen', 'descripcion', 'habitaciones', 'wc', 'estacionamiento', 'creado', 'vendedores_id'];
   public $id;
   public $titulo;
   public $precio;
@@ -18,7 +18,7 @@ class Propiedad
   public $wc;
   public $estacionamiento;
   public $creado;
-  public $vendedores_Id;
+  public $vendedores_id;
 
   //DEFINIR LA CONEXION A LA DB
   public static function setDB($database)
@@ -37,8 +37,9 @@ class Propiedad
     $this->wc = $args['wc'] ?? "";
     $this->estacionamiento = $args['estacionamiento'] ?? "";
     $this->creado = date('Y/m/d');
-    $this->vendedores_Id = $args['vendedores_Id'] ?? "";
+    $this->vendedores_id = $args['vendedorId'] ?? "";
   }
+
   public function guardar()
   {
     //SANITIZAR LOS DATOS
@@ -51,8 +52,10 @@ class Propiedad
     $query .= " ') ";
     $resultado = self::$db->query($query);
 
+    self::$db->query($query);
     debuguear($resultado);
   }
+
 
   //Identificar y unir los atributos de la DB
   public function atributos()
@@ -65,9 +68,12 @@ class Propiedad
     }
     return $atributos;
   }
+
+
   public function sanitizarDatos()
   {
     $atributos = $this->atributos();
+
     $sanitizado = [];
 
     foreach ($atributos as $key => $value) {

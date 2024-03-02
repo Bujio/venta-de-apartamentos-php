@@ -20,18 +20,22 @@ $resultado = mysqli_query($db, $consulta);
 $errores = [];
 
 //incorporamos los datos del formulario
-$propiedad = new Propiedad($_POST);
-$propiedad->guardar();
+
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  $propiedad = new Propiedad($_POST);
+  $propiedad->guardar();
+
+
+
   $titulo = mysqli_real_escape_string($db, $_POST["titulo"]);
   $precio = mysqli_real_escape_string($db, $_POST["precio"]);
   $descripcion = mysqli_real_escape_string($db, $_POST["descripcion"]);
   $habitaciones = mysqli_real_escape_string($db, $_POST["habitaciones"]);
   $wc = mysqli_real_escape_string($db, $_POST["wc"]);
   $estacionamiento = mysqli_real_escape_string($db, $_POST["estacionamiento"]);
-  $vendedores_Id = mysqli_real_escape_string($db, $_POST["vendedor"]);
+  $vendedores_Id = mysqli_real_escape_string($db, $_POST["vendedorId"]);
   $creado = date("Y/m/d");
 
   //Asignar files a la imagen
@@ -153,7 +157,7 @@ incluirTemplate("header");
     <fieldset>
       <legend>Vendedor</legend>
 
-      <select name="vendedores_Id" value="<?php echo $vendedores_Id; ?>">
+      <select name="vendedorId" value="<?php echo $vendedores_Id; ?>">
         <option value="" disabled selected>--Seleccione Vendedor--</option>
         <?php while ($vendedor = mysqli_fetch_assoc($resultado)) { ?>
           <option <?php echo $vendedores_Id === $vendedor["id"] ? "selected" : ""; ?> value="<?php echo $vendedor["id"] ?>"><?php echo $vendedor["nombre"] ?></option>
