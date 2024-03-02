@@ -2,7 +2,7 @@
 
 function conectarDB() : mysqli
 {
-  $db = mysqli_connect("localhost", "root", "Fado76072789", "bienesraices_crud");
+  $db = new mysqli("localhost", "root", "Fado76072789", "bienesraices_crud");
 
   if (!$db) {
     echo "Error no se pudo contectar";

@@ -1,6 +1,6 @@
 <?php
-require "includes/functions.php";
-require "/bienesRaicesPHP_inicio/includes/config/database.php";
+require "includes/app.php";
+
 $db = conectarDB();
 //Petición información
 $infoAnuncio = "SELECT * FROM propiedades LIMIT 3";

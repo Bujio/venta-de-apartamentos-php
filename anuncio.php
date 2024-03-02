@@ -1,9 +1,9 @@
 <?php
+require "includes/app.php";
 //Identificar valores y validación
 $id = filter_var($_GET["id"], FILTER_VALIDATE_INT);
 
 //Base de datos
-require "/bienesRaicesPHP_inicio/includes/config/database.php";
 $db = conectarDB();
 
 
@@ -11,7 +11,7 @@ $db = conectarDB();
 if (!$id) {
     header("Location:/admin");
 }
-require "includes/functions.php";
+
 
 // //Obtener datos de la propiedad
 $datosPropiedad = "SELECT * FROM propiedades WHERE id= $id";
