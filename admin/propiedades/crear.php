@@ -3,12 +3,11 @@ require '../../includes/app.php';
 
 use App\Propiedad;
 
-
 estaAutenticado();
 
 
 //Base de datos
-require "../../includes/config/database.php";
+
 $db = conectarDB();
 
 //consultar vendedores
@@ -20,14 +19,10 @@ $resultado = mysqli_query($db, $consulta);
 //Errores
 $errores = [];
 
-//iniciamos las variables vacias
-$titulo = "";
-$precio = "";
-$descripcion = "";
-$habitaciones = "";
-$wc = mysqli_real_escape_string($db, $_POST["wc"]);
-$estacionamiento = "";
-$vendedores_Id = "";
+//incorporamos los datos del formulario
+$propiedad = new Propiedad($_POST);
+$propiedad->guardar();
+
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $titulo = mysqli_real_escape_string($db, $_POST["titulo"]);
@@ -101,8 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
     //Incluir en la DB
-    $query = " INSERT INTO propiedades(titulo,precio,imagen,descripcion,habitaciones,wc,estacionamiento,creado,vendedores_Id)
-  VALUES ('$titulo','$precio','$nombreImagen','$descripcion','$habitaciones','$wc','$estacionamiento','$creado','$vendedores_Id');";
+    $propiedad->guardar();
     //echo $query;
 
     $resultado = mysqli_query($db, $query);
@@ -112,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
   }
 }
-require "../../includes/functions.php";
+
 
 incluirTemplate("header");
 
@@ -159,7 +153,7 @@ incluirTemplate("header");
     <fieldset>
       <legend>Vendedor</legend>
 
-      <select name="vendedor" value="<?php echo $vendedores_Id; ?>">
+      <select name="vendedores_Id" value="<?php echo $vendedores_Id; ?>">
         <option value="" disabled selected>--Seleccione Vendedor--</option>
         <?php while ($vendedor = mysqli_fetch_assoc($resultado)) { ?>
           <option <?php echo $vendedores_Id === $vendedor["id"] ? "selected" : ""; ?> value="<?php echo $vendedor["id"] ?>"><?php echo $vendedor["nombre"] ?></option>
