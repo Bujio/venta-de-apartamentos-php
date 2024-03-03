@@ -1,100 +1,122 @@
 <?php
-require "../includes/functions.php";
-require "../includes/config/database.php";
-
+require "../includes/app.php";
 $auth = estaAutenticado();
 
-if (!$auth) {
-  header('Location: /');
-}
-//Importamos conexion de DB
-$db = conectarDB();
-//Escribimos la query
-$queryPropiedades = "SELECT * FROM propiedades;";
+//IMPORTAR CLASES
+use App\Propiedad;
+use App\Vendedor;
 
-//Consultamos la db
-$consultaPropiedades = mysqli_query($db, $queryPropiedades);
+//IMPLEMENTAR UN METODO PARA OBTENER TODAS LAS PROPIEDADES
+$propiedades = Propiedad::all();
+$vendedores = Vendedor::all();
 
+//MUESTRA MENSAJE CONDICIONAL
+$resultado = $_GET['resultado'] ?? null; // "??" placeholder busca ese valor y si no existe asigna null
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") { //COMPROBACION 
 
-//Muestra mensaje opcional
-$resultado = $_GET["resultado"] ?? null;
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  //este id no va a existir hasta que no  se mande el POST, por eso lo evaluamos dentro.
-  $id = $_POST['id'];
+  //VALIDAR ID
+  $id = $_POST["id"];
   $id = filter_var($id, FILTER_VALIDATE_INT);
 
   if ($id) {
+    $tipo = $_POST['tipo'];
 
-    //eliminar imagen
-    $queryImagen = "SELECT imagen FROM propiedades WHERE id='$id'";
-    $resultado = mysqli_query($db, $queryImagen);
-    $imagenPropiedad = mysqli_fetch_assoc($resultado);
-    unlink('../src/img/' . $imagenPropiedad['imagen']);
-
-    //eliminar propiedad de db
-    $query = "DELETE FROM propiedades WHERE id=$id;";
-    $resultado = mysqli_query($db, $query);
-
-    if ($resultado) {
-      header('Location: /admin?resultado=3');
+    if (validarTipoContenido($tipo)) {
+      //COMPARA LO QUE VAMOS A ELIMINAR
+      if ($tipo === 'vendedor') {
+        //ELIMINAR EL ARCHIVO
+        $vendedor = Vendedor::find($id);
+        $vendedor->eliminar();
+      } else if ($tipo === 'propiedad') {
+        //ELIMINAR EL ARCHIVO
+        $propiedad = Propiedad::find($id);
+        $propiedad->eliminar();
+      }
     }
   }
 }
 
-//Incluye un template
+//INCLUYE UN TEMPLATE
 incluirTemplate("header");
-
 ?>
-
 <main class="contenedor seccion">
-  <h1>Administrador</h1>
-  <?php if (intval($resultado) === 1) : ?>
-    <p class="alerta correcta">Propiedad Creada Correctamente</p>
-  <?php elseif (intval($resultado) === 2) : ?>
-    <p class="alerta correcta">Propiedad Actualizada Correctamente</p>
-  <?php elseif (intval($resultado) === 3) : ?>
-    <p class="alerta correcta">Propiedad Elimininada Correctamente</p>
-  <?php endif ?>
-  <a href="/admin/propiedades/crear.php" class="boton-verde">Nueva Propiedad</a>
+  <h1>Administrador de bienes raices</h1>
 
+
+  <?php
+  $mensaje = mostrarNotificacion(intval($resultado));
+  if ($mensaje) { ?>
+    <p class="alerta exito"><?php echo s($mensaje) ?></p>
+  <?php } ?>
+
+  <a href="/admin/propiedades/crear.php" class="boton boton-verde">Nueva Porpiedad</a>
+  <a href="/admin/vendedores/crear.php" class="boton boton-amarillo">Nuevo Vendedor</a>
+  <h2>Propiedades</h2>
   <table class="propiedades">
     <thead>
       <tr>
-        <th>Id</th>
-        <th>Título</th>
+        <th>ID</th>
+        <th>Titulo</th>
         <th>Imagen</th>
         <th>Precio</th>
         <th>Acciones</th>
       </tr>
     </thead>
-    <tbody>
-      <?php while ($propiedad = mysqli_fetch_assoc($consultaPropiedades)) : ?>
-        <tr>
 
-          <td class="centrar-texto"><?php echo $propiedad["id"] ?></td>
-          <td class="centrar-texto"><?php echo $propiedad["titulo"] ?></td>
-          <td><img src="/src/img/<?php echo $propiedad["imagen"]  ?>" class="imagen-tabla "></td>
-          <td class="centrar-texto"><?php echo $propiedad["precio"] . " €" ?></td>
+    <tbody> <!--MOSTRAR LOS RESULTADOS -->
+      <?php foreach ($propiedades as $propiedad) : ?>
+        <tr>
+          <td> <?php echo $propiedad->id; ?> </td>
+          <td> <?php echo $propiedad->titulo; ?> </td>
+          <td> <img src="/imagenes/<?php echo $propiedad->imagen; ?>" class="imagen-tabla"></td>
+          <td>$ <?php echo $propiedad->precio ?> </td>
           <td>
             <form method="POST" class="w-100">
-              <!-- para mandar datos y que no se vea el input -->
-              <input type="hidden" name="id" value="<?php echo $propiedad["id"] ?>">
-              <input type="submit" class=" boton-rojo-block" value="Eliminar">
+              <input type="hidden" name="id" value="<?php echo $propiedad->id; ?>">
+              <input type="hidden" name="tipo" value="propiedad">
+              <input type="submit" class="boton-rojo-block" value="Eliminar">
             </form>
-            <a class="boton-amarillo-block" href="/admin/propiedades/actualizar.php?id=<?php echo $propiedad["id"] ?>">Actualizar</a>
+            <a href="/admin/propiedades/actualizar.php?id=<?php echo $propiedad->id; ?>" class="boton-amarillo-block">Actualizar</a>
           </td>
         </tr>
-      <?php endwhile; ?>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+
+  <h2>Vendedores</h2>
+  <table class="propiedades">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Telefono</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody> <!--MOSTRAR LOS RESULTADOS -->
+      <?php foreach ($vendedores as $vendedor) : ?>
+        <tr>
+          <td> <?php echo $vendedor->id; ?> </td>
+          <td> <?php echo $vendedor->nombre . " " . $vendedor->apellido; ?> </td>
+          <td> <?php echo $vendedor->telefono ?> </td>
+          <td>
+            <form method="POST" class="w-100">
+              <input type="hidden" name="id" value="<?php echo $vendedor->id; ?>">
+              <input type="hidden" name="tipo" value="vendedor">
+
+              <input type="submit" class="boton-rojo-block" value="Eliminar">
+            </form>
+            <a href="/admin/vendedores/actualizar.php?id=<?php echo $vendedor->id; ?>" class="boton-amarillo-block">Actualizar</a>
+          </td>
+        </tr>
+      <?php endforeach; ?>
     </tbody>
   </table>
 
 </main>
 
 <?php
-
 incluirTemplate("footer");
-//Opcional: cerrar la conexion
-mysqli_close($db);
 ?>

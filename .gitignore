@@ -1,14 +1,8 @@
-#ignore modules
-node_modules
-
-
-
-#ignore files
-# usuarios.php
-
-
-
-#ignore all files in any directory named build
-build/
-
-/vendor/
+node_modules/
+src/
+gulpfile.js
+package-lock.json
+package.json
+composer.json
+composer.lock
+vendor/

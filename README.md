@@ -12,8 +12,9 @@ Bienesraices is an application developed with PHP, GULP, SASS, JavaScript, and M
 ## Prerequisites
 
 - PHP (version 8.3.2)
-- GULP 
-- SASS 
+- COMPOSER
+- GULP
+- SASS
 - Modernizr
 - Modern web browser compatible with JavaScript
 

@@ -13,6 +13,9 @@
             "email": "javier.vivas@icloud.com"
         }
     ],
-    "require": {}
+    "require": {
+        "intervention/image": "2.7",
+        "gemorroj/archive7z": "^5.7"
+    }
 
 }
