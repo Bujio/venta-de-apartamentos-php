@@ -1,14 +1,17 @@
 <?php
 
-
 namespace App;
 
-
-class Propiedad
+class Propiedad extends ActiveRecord
 {
-  //BASES DE DATOS
-  protected static $db;
-  protected static $columnasDB = ['id','titulo', 'precio', 'imagen', 'descripcion', 'habitaciones', 'wc', 'estacionamiento', 'creado', 'vendedores_id'];
+
+  protected static $tabla = ' propiedades';
+  protected static $columnasDB = [
+    'id', 'titulo', 'precio', 'imagen',
+    'descripcion', 'habitaciones', 'wc', 'estacionamiento',
+    'creado', 'vendedores_id'
+  ];
+
   public $id;
   public $titulo;
   public $precio;
@@ -20,65 +23,53 @@ class Propiedad
   public $creado;
   public $vendedores_id;
 
-  //DEFINIR LA CONEXION A LA DB
-  public static function setDB($database)
-  {
-    self::$db = $database;
-  }
-
   public function __construct($args = [])
   {
-    $this->id = $args['id'] ?? "";
-    $this->titulo = $args['titulo'] ?? "";
-    $this->precio = $args['precio'] ?? "";
-    $this->imagen = $args['imagen'] ?? "imagen.jpg";
-    $this->descripcion = $args['descripcion'] ?? "";
-    $this->habitaciones = $args['habitaciones'] ?? "";
-    $this->wc = $args['wc'] ?? "";
-    $this->estacionamiento = $args['estacionamiento'] ?? "";
-    $this->creado = date('Y/m/d');
-    $this->vendedores_id = $args['vendedorId'] ?? "";
+    $this->id = $args['id'] ?? null;
+    $this->titulo = $args['titulo'] ?? '';
+    $this->precio = $args['precio'] ?? '';
+    $this->imagen = $args['imagen'] ?? '';
+    $this->descripcion = $args['descripcion'] ?? '';
+    $this->habitaciones = $args['habitaciones'] ?? '';
+    $this->wc = $args['wc'] ?? '';
+    $this->estacionamiento = $args['estacionamiento'] ?? '';
+    $this->creado = date("Y/m/d");
+    $this->vendedores_id = $args['vendedores_id'] ?? '';
   }
 
-  public function guardar()
+  public function validar()
   {
-    //SANITIZAR LOS DATOS
-    $atributos = $this->sanitizarDatos();
-    //Incluir en la DB
-    $query = " INSERT INTO propiedades ( ";
-    $query .= join(', ', array_keys($atributos));
-    $query .= " ) VALUES (' ";
-    $query .= join("', '", array_values($atributos));
-    $query .= " ') ";
-    $resultado = self::$db->query($query);
 
-    self::$db->query($query);
-    debuguear($resultado);
-  }
-
-
-  //Identificar y unir los atributos de la DB
-  public function atributos()
-  {
-    $atributos = [];
-    foreach (self::$columnasDB as $columna) {
-      //ignora la columna de id y continua.
-      if ($columna === 'id') continue;
-      $atributos[$columna] = $this->$columna;
+    if (!$this->titulo) {
+      self::$errores[] = "Debes añadir un titulo";
     }
-    return $atributos;
-  }
 
-
-  public function sanitizarDatos()
-  {
-    $atributos = $this->atributos();
-
-    $sanitizado = [];
-
-    foreach ($atributos as $key => $value) {
-      $sanitizado[$key] = self::$db->escape_string($value);
+    if (!$this->precio) {
+      self::$errores[] = "El precio es obligatorio";
     }
-    return $sanitizado;
+
+    if (strlen($this->descripcion) < 50) {
+      self::$errores[] = "La descripcion es obligatoria y debe tener al menos 50 caracteres";
+    }
+
+    if (!$this->habitaciones) {
+      self::$errores[] = "El numero de habitaciones es obligatorio";
+    }
+
+    if (!$this->wc) {
+      self::$errores[] = "El numero de Wc es obligatorio";
+    }
+    if (!$this->estacionamiento) {
+      self::$errores[] = "El numero de lugares de estacionamiento es obligatorio";
+    }
+    if (!$this->vendedores_id) {
+      self::$errores[] = "Elige un vendedor";
+    }
+
+    if (!$this->imagen) {
+      self::$errores[] = "La imagen de la propiedad es obligatoria";
+    }
+
+    return self::$errores;
   }
-};
+}

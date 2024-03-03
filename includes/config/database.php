@@ -1,13 +1,12 @@
 <?php
 
-function conectarDB() : mysqli
+function conectarDB(): mysqli
 {
-  $db = new mysqli("localhost", "root", "Fado76072789", "bienesraices_crud");
-
+  $db = new mysqli("localhost", "root", "Fado76072789", "bienesraices_crud"); //mysqli es la forma O.Objetos
   if (!$db) {
-    echo "Error no se pudo contectar";
+    echo "Error no se pudo conectar";
     exit;
-  } else {
-    return $db;
   }
+
+  return $db;
 }
